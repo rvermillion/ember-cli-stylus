@@ -29,17 +29,26 @@ function EmberCLIStylus(project) {
 EmberCLIStylus.prototype.treeFor = function treeFor(type) {
 };
 
-EmberCLIStylus.prototype.included = function included(app) {
-  if (app.app) app = app.app;
-  var options = app.options.stylusOptions || {};
-  if ((options.sourceMap === undefined) && (app.env == 'development')) {
+EmberCLIStylus.prototype.included = function included(app, parentAddon) {
+
+  this._super.included.apply(this, arguments);
+
+  var target = parentAddon || app;
+
+  if (target.app) {
+    target = target.app;
+  }
+  target.options = target.options || {};
+
+  var options = target.options.stylusOptions || {};
+  if ((options.sourceMap === undefined) && (target.env == 'development')) {
     options.sourcemap = {
       inline: true
     };
     options.cache = false;
   }
-  options.outputFile = options.outputFile || this.project.name + '.css';
-  app.registry.add('css', new StylusPlugin(options));
+  options.outputFile = options.outputFile || target.project.name + '.css';
+  target.registry.add('css', new StylusPlugin(options));
 };
 
 module.exports = EmberCLIStylus;
