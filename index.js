@@ -38,7 +38,7 @@ EmberCLIStylus.prototype.included = function included(app) {
     };
     options.cache = false;
   }
-  options.outputFile = options.outputFile || this.project.name() + '.css';
+  options.outputFile = options.outputFile || this.project.name + '.css';
   app.registry.add('css', new StylusPlugin(options));
 };
 
