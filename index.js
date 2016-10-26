@@ -30,6 +30,7 @@ EmberCLIStylus.prototype.treeFor = function treeFor(type) {
 };
 
 EmberCLIStylus.prototype.included = function included(app) {
+  if (app.app) app = app.app;
   var options = app.options.stylusOptions || {};
   if ((options.sourceMap === undefined) && (app.env == 'development')) {
     options.sourcemap = {
