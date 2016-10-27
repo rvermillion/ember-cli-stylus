@@ -21,34 +21,30 @@ StylusPlugin.prototype.toTree = function(tree, inputPath, outputPath) {
   return new StylusCompiler(trees, inputPath, outputPath, this.options);
 };
 
-function EmberCLIStylus(project) {
-  this.project = project;
-  this.name = 'Ember CLI Stylus';
-}
+module.exports = {
+  name: 'ember-cli-stylus',
 
-EmberCLIStylus.prototype.treeFor = function treeFor(type) {
-};
+  treeFor: function treeFor(type) {},
 
-EmberCLIStylus.prototype.included = function included(app, parentAddon) {
+  included: function included(app, parentAddon) {
 
-  this._super.included.apply(this, arguments);
+    this._super.included.apply(this, arguments);
 
-  var target = parentAddon || app;
+    var target = parentAddon || app;
 
-  if (target.app) {
-    target = target.app;
+    if (target.app) {
+      target = target.app;
+    }
+    target.options = target.options || {};
+
+    var options = target.options.stylusOptions || {};
+    if ((options.sourceMap === undefined) && (target.env == 'development')) {
+      options.sourcemap = {
+        inline: true
+      };
+      options.cache = false;
+    }
+    options.outputFile = options.outputFile || target.project.name + '.css';
+    target.registry.add('css', new StylusPlugin(options));
   }
-  target.options = target.options || {};
-
-  var options = target.options.stylusOptions || {};
-  if ((options.sourceMap === undefined) && (target.env == 'development')) {
-    options.sourcemap = {
-      inline: true
-    };
-    options.cache = false;
-  }
-  options.outputFile = options.outputFile || target.project.name + '.css';
-  target.registry.add('css', new StylusPlugin(options));
 };
-
-module.exports = EmberCLIStylus;
