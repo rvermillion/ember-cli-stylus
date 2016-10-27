@@ -24,8 +24,6 @@ StylusPlugin.prototype.toTree = function(tree, inputPath, outputPath) {
 module.exports = {
   name: 'ember-cli-stylus',
 
-  treeFor: function treeFor(type) {},
-
   included: function included(app, parentAddon) {
 
     this._super.included.apply(this, arguments);
@@ -44,7 +42,7 @@ module.exports = {
       };
       options.cache = false;
     }
-    options.outputFile = options.outputFile || target.project.name + '.css';
+    options.outputFile = options.outputFile || target.project.name() + '.css';
     target.registry.add('css', new StylusPlugin(options));
   }
 };
